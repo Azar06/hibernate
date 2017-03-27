@@ -2,7 +2,7 @@ package com.valtech.tp.app1.domain.model.order;
 
 import com.google.common.collect.ImmutableList;
 import com.valtech.tp.app1.domain.model.product.Product;
-import com.valtech.tp.app1.domain.model.commun.EntityObject;
+import com.valtech.tp.app1.domain.model.commun.DomainEntity;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 
 
 @Entity
-public class OrderLine extends EntityObject {
+public class OrderLine extends DomainEntity {
     @Id
     @GeneratedValue
     private Long id;

@@ -1,7 +1,6 @@
 package com.valtech.tp.app1.domain.repository.order;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Sets;
 import com.valtech.tp.app1.domain.model.address.Address;
 import com.valtech.tp.app1.domain.model.customer.Customer;
 import com.valtech.tp.app1.domain.model.order.Order;
@@ -15,17 +14,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.jpa.provider.HibernateUtils;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import static com.google.common.collect.Sets.newHashSet;
-import static org.assertj.core.api.Assertions.*;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -206,7 +202,7 @@ public class OrderRepositoryTest {
         System.out.println(order.getOrderLines().size());
 
         order = (Order) session.createQuery("from Order o left join fetch o.orderLines where id = :id")
-        .setParameter("id", order.getOrderId()).uniqueResult();
+                .setParameter("id", order.getOrderId()).uniqueResult();
 
         em.clear();
 

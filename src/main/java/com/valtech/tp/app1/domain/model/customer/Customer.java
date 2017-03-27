@@ -2,7 +2,7 @@ package com.valtech.tp.app1.domain.model.customer;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.valtech.tp.app1.domain.model.address.Address;
-import com.valtech.tp.app1.domain.model.commun.EntityObject;
+import com.valtech.tp.app1.domain.model.commun.DomainEntity;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
@@ -11,7 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 
 @Entity
-public class Customer extends EntityObject {
+public class Customer extends DomainEntity {
     @Id
     @GeneratedValue
     private Long id;

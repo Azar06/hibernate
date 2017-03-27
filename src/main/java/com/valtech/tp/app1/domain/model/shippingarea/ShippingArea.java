@@ -1,7 +1,7 @@
 package com.valtech.tp.app1.domain.model.shippingarea;
 
 import com.valtech.tp.app1.domain.model.address.Address;
-import com.valtech.tp.app1.domain.model.commun.EntityObject;
+import com.valtech.tp.app1.domain.model.commun.DomainEntity;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.Embedded;
@@ -10,7 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class ShippingArea extends EntityObject {
+public class ShippingArea extends DomainEntity {
     @Id
     @GeneratedValue
     private Long id;

@@ -1,7 +1,7 @@
 package com.valtech.tp.app1.domain.model.product;
 
 import com.valtech.tp.app1.domain.model.review.Review;
-import com.valtech.tp.app1.domain.model.commun.EntityObject;
+import com.valtech.tp.app1.domain.model.commun.DomainEntity;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Range;
@@ -17,7 +17,7 @@ import java.util.List;
                 @Index(name = "I_Product_name", columnList = "name")
         }
 )
-public class Product extends EntityObject {
+public class Product extends DomainEntity {
     @Id
     @GeneratedValue
     private Long id;

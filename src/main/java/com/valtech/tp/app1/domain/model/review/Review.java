@@ -3,7 +3,7 @@ package com.valtech.tp.app1.domain.model.review;
 import com.google.common.collect.ImmutableList;
 import com.valtech.tp.app1.domain.model.customer.Customer;
 import com.valtech.tp.app1.domain.model.product.Product;
-import com.valtech.tp.app1.domain.model.commun.EntityObject;
+import com.valtech.tp.app1.domain.model.commun.DomainEntity;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.Range;
 
@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
-public class Review extends EntityObject {
+public class Review extends DomainEntity {
 
     @Id
     @GeneratedValue
