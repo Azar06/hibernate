@@ -1,8 +1,6 @@
-package com.valtech.utils.model;
+package com.valtech.util.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Objects;
 
 public abstract class EntityObject implements Serializable {
 

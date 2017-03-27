@@ -2,24 +2,20 @@ package com.valtech.tp.app1.domain.repository.customer;
 
 
 import com.valtech.tp.app1.domain.model.customer.Customer;
+import com.valtech.util.model.DomainRepository;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 @Repository
-public class CustomerRepository {
-
-    @Autowired
-    private EntityManager em;
+public class CustomerRepository extends DomainRepository {
 
     public Customer findById(Long id) {
-        return em.find(Customer.class, id);
+        return getEntityManager().find(Customer.class, id);
     }
 
     public Customer findByEmail_hql(String email) {
@@ -31,7 +27,7 @@ public class CustomerRepository {
 
 
     private Session getHibernateSession() {
-        return em.unwrap(Session.class);
+        return getEntityManager().unwrap(Session.class);
     }
 
     public Customer findByEmail_criteria(String email) {
@@ -42,10 +38,10 @@ public class CustomerRepository {
 
 
     public Customer findByEmail_criteria_jpa(String email) {
-        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaBuilder criteriaBuilder = getEntityManager().getCriteriaBuilder();
         CriteriaQuery criteriaQuery = criteriaBuilder.createQuery(Customer.class);
         Root<Customer> customerRoot = criteriaQuery.from(Customer.class);
-        return (Customer) em.createQuery(criteriaQuery
+        return (Customer) getEntityManager().createQuery(criteriaQuery
                 .select(customerRoot)
                 .where(criteriaBuilder.equal(customerRoot.get("email"), email)))
                 .getSingleResult();
@@ -53,6 +49,6 @@ public class CustomerRepository {
 
 
     public void insertCustomer(Customer customer) {
-        em.persist(customer);
+        getEntityManager().persist(customer);
     }
 }

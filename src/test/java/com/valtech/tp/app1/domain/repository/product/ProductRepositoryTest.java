@@ -1,6 +1,5 @@
 package com.valtech.tp.app1.domain.repository.product;
 
-
 import com.valtech.tp.app1.domain.model.product.Product;
 import com.valtech.tp.app1.domain.model.product.ProductCriteria;
 import com.valtech.tp.app1.domain.model.product.ProductLite;
@@ -12,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,12 +26,12 @@ public class ProductRepositoryTest {
     @Autowired
     private EntityManager em;
 
-    private String ref = "MyRef";
-    private String name = "MyName";
-    private Double price = 10.9d;
-    private String description = "description";
+    private static String ref = "MyRef";
+    private static String name = "MyName";
+    private static Double price = 10.9d;
+    private static String description = "description";
 
-    private Product createDummyProduct() {
+    public static Product createDummyProduct() {
         Product product = new Product(ref);
         product.setName(name);
         product.setPrice(price);
@@ -40,7 +40,7 @@ public class ProductRepositoryTest {
     }
 
     @Test
-    public void insertTest() {
+    public void insert() {
         Product p = createDummyProduct();
         repo.insert(p);
 
@@ -51,7 +51,7 @@ public class ProductRepositoryTest {
     }
 
     @Test
-    public void getProductTest() throws Exception {
+    public void getProduct() throws Exception {
         Product product = createDummyProduct();
         em.persist(product);
 
@@ -61,7 +61,7 @@ public class ProductRepositoryTest {
     }
 
     @Test
-    public void findProductByReferenceWithCriteria_Test() throws Exception {
+    public void findProductByReferenceWithCriteria() throws Exception {
         Product product = createDummyProduct();
         em.persist(product);
 
@@ -73,7 +73,7 @@ public class ProductRepositoryTest {
     }
 
     @Test
-    public void findProductByReferenceWithJpaCriteria_Test() throws Exception {
+    public void findProductByReferenceWithJpaCriteria() throws Exception {
         Product product = createDummyProduct();
         em.persist(product);
         em.clear();

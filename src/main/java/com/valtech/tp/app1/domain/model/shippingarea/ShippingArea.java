@@ -1,12 +1,13 @@
 package com.valtech.tp.app1.domain.model.shippingarea;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.valtech.tp.app1.domain.model.address.Address;
-import com.valtech.utils.model.EntityObject;
-import org.hibernate.annotations.NaturalId;
+import com.valtech.util.model.EntityObject;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.persistence.*;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Entity
 public class ShippingArea extends EntityObject {

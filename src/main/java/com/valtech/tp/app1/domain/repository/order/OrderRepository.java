@@ -1,21 +1,20 @@
 package com.valtech.tp.app1.domain.repository.order;
 
 import com.valtech.tp.app1.domain.model.order.Order;
+import com.valtech.util.model.DomainRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 
 @Repository
-public class OrderRepository {
-    @Autowired
-    private EntityManager em;
+public class OrderRepository extends DomainRepository {
 
     public void insert(Order order) {
-        em.persist(order);
+        getEntityManager().persist(order);
     }
 
     public Order getOrder(Long id) {
-        return em.find(Order.class, id);
+        return getEntityManager().find(Order.class, id);
     }
 }

@@ -1,15 +1,11 @@
 package com.valtech.tp.app1.domain.model.order;
 
 import com.google.common.collect.ImmutableList;
-import com.valtech.tp.app1.domain.model.customer.Customer;
 import com.valtech.tp.app1.domain.model.product.Product;
-import com.valtech.utils.model.EntityObject;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.Immutable;
+import com.valtech.util.model.EntityObject;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 
 @Entity

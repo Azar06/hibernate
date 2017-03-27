@@ -2,15 +2,13 @@ package com.valtech.tp.app1.domain.model.customer;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.valtech.tp.app1.domain.model.address.Address;
-import com.valtech.tp.app1.domain.model.review.Review;
-import com.valtech.utils.model.EntityObject;
+import com.valtech.util.model.EntityObject;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
-import java.util.List;
 
 @Entity
 public class Customer extends EntityObject {

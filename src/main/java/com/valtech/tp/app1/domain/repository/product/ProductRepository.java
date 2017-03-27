@@ -3,6 +3,7 @@ package com.valtech.tp.app1.domain.repository.product;
 import com.valtech.tp.app1.domain.model.product.Product;
 import com.valtech.tp.app1.domain.model.product.ProductCriteria;
 import com.valtech.tp.app1.domain.model.product.ProductLite;
+import com.valtech.util.model.DomainRepository;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
@@ -20,20 +21,18 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Repository
-public class ProductRepository {
-    @Autowired
-    private EntityManager em;
+public class ProductRepository extends DomainRepository {
 
     public ProductRepository() {
 
     }
 
     public void insert(Product product) {
-        em.persist(product);
+        getEntityManager().persist(product);
     }
 
     public Product getProduct(Long id) {
-        return em.find(Product.class, id);
+        return getEntityManager().find(Product.class, id);
     }
 
     public Product findProductByReference(String ref) {
@@ -51,14 +50,14 @@ public class ProductRepository {
     }
 
     public Product findProductByReferenceWithJpaCriteria(String ref) {
-        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaBuilder criteriaBuilder = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<Product> criteria = criteriaBuilder.createQuery(Product.class);
 
         Root<Product> productRoot = criteria.from(Product.class);
         criteria.select(productRoot)
                 .where(criteriaBuilder.equal(productRoot.get("reference"), ref));
 
-        return em.createQuery(criteria).getSingleResult();
+        return getEntityManager().createQuery(criteria).getSingleResult();
     }
 
     public List<ProductLite> findProductsByCriteria(ProductCriteria productCriteria) {
@@ -82,6 +81,6 @@ public class ProductRepository {
     }
 
     private Session getHibernateSession() {
-        return em.unwrap(Session.class);
+        return getEntityManager().unwrap(Session.class);
     }
 }

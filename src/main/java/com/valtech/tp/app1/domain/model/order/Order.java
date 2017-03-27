@@ -2,7 +2,7 @@ package com.valtech.tp.app1.domain.model.order;
 
 import com.google.common.collect.ImmutableList;
 import com.valtech.tp.app1.domain.model.customer.Customer;
-import com.valtech.utils.model.EntityObject;
+import com.valtech.util.model.EntityObject;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
@@ -23,8 +23,8 @@ public class Order extends EntityObject {
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
-    //@NaturalId
-    //@NotNull
+    @NaturalId
+    @NotNull
     @ManyToOne
     private Customer customer;
 

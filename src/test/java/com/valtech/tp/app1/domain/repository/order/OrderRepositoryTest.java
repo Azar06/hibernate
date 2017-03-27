@@ -98,7 +98,7 @@ public class OrderRepositoryTest {
 
     @Test
     @Ignore
-    public void insert_WithOneOrderLine_Test() throws Exception {
+    public void insert_withOneOrderLine() throws Exception {
         // modelisation
         Order order = createOrder();
         Product product = createDummyProduct("MyRef");
@@ -122,7 +122,7 @@ public class OrderRepositoryTest {
 
     @Test
     @Ignore
-    public void insert_WithOneOrderLine_AddedAfterSave_Test() throws Exception {
+    public void insert_withOneOrderLine_addedAfterSave() throws Exception {
         // modelisation
         Order order = createOrder();
         Product product = createDummyProduct("MyRef");
@@ -145,20 +145,19 @@ public class OrderRepositoryTest {
     }
 
     @Test(expected = Exception.class)
-    public void insert_WithoutExistingCustomer_Test() throws Exception {
+    public void insert_withoutExistingCustomer() throws Exception {
         Order order = createOrder();
         repo.insert(order);
     }
 
     @Test
-    public void getOrder_Test() throws Exception {
+    public void getOrder() throws Exception {
         Order order = createOrder();
         em.persist(order.getCustomer());
         em.persist(order);
         em.clear();
 
         Order foundOrder = repo.getOrder(order.getOrderId());
-        assertThat(foundOrder.getDate()).isEqualTo(order.getDate());
         assertThat(foundOrder).isEqualTo(order);
         assertThat(foundOrder.getCustomer()).isEqualTo(this.createDummyCustomer());
     }

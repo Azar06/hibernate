@@ -23,16 +23,16 @@ public class CustomerRepositoryTest {
     @Autowired
     private CustomerRepository repo;
 
-    private String lastName = "Zaragoza";
-    private String firstName = "Arnaud";
-    private String email = "arnaud.zaragoza@valtech.com";
+    private static String lastName = "Zaragoza";
+    private static String firstName = "Arnaud";
+    private static String email = "arnaud.zaragoza@valtech.com";
 
-    private String street = "148 Rue de Courcelles";
-    private String postCode = "75017";
-    private String city = "Paris";
-    private String country = "France";
+    private static String street = "148 Rue de Courcelles";
+    private static String postCode = "75017";
+    private static String city = "Paris";
+    private static String country = "France";
 
-    private Address createDummyAddress() {
+    public static Address createDummyAddress() {
         Address address = new Address();
         address.setStreet(street);
         address.setPostCode(postCode);
@@ -41,7 +41,7 @@ public class CustomerRepositoryTest {
         return address;
     }
 
-    private Customer createDummyCustomer() {
+    public static Customer createDummyCustomer() {
         Customer customer = new Customer(email);
         customer.setFirstName(firstName);
         customer.setLastName(lastName);
@@ -50,7 +50,7 @@ public class CustomerRepositoryTest {
     }
 
     @Test
-    public void insertCustomer_test() throws Exception {
+    public void insertCustomer() throws Exception {
         Customer dummyCustomer = createDummyCustomer();
         repo.insertCustomer(dummyCustomer);
         em.clear();
@@ -60,7 +60,7 @@ public class CustomerRepositoryTest {
     }
 
     @Test
-    public void basicTest() throws Exception {
+    public void insertAndFind_withEntityManager() throws Exception {
         Customer customer = createDummyCustomer();
         em.persist(customer);
 

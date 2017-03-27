@@ -1,10 +1,8 @@
 package com.valtech.tp.app1.domain.model.address;
 
-import com.sun.istack.internal.NotNull;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.Embeddable;
-import javax.persistence.Entity;
 import javax.validation.constraints.Size;
 
 @Embeddable
