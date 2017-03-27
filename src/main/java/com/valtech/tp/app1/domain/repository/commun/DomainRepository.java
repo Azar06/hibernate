@@ -1,4 +1,4 @@
-package com.valtech.util.model;
+package com.valtech.tp.app1.domain.repository.commun;
 
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +15,7 @@ public class DomainRepository {
         return entityManager;
     }
 
-    public Session getHibernateSession() {
+    public Session getCurrentHbnSession() {
         return getEntityManager().unwrap(Session.class);
-    }
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
     }
 }

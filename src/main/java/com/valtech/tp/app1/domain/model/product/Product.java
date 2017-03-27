@@ -1,7 +1,7 @@
 package com.valtech.tp.app1.domain.model.product;
 
 import com.valtech.tp.app1.domain.model.review.Review;
-import com.valtech.util.model.EntityObject;
+import com.valtech.tp.app1.domain.model.commun.EntityObject;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Range;

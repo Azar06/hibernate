@@ -2,8 +2,7 @@ package com.valtech.tp.app1.domain.repository.customer;
 
 
 import com.valtech.tp.app1.domain.model.customer.Customer;
-import com.valtech.util.model.DomainRepository;
-import org.hibernate.Session;
+import com.valtech.tp.app1.domain.repository.commun.DomainRepository;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
@@ -19,7 +18,7 @@ public class CustomerRepository extends DomainRepository {
     }
 
     public Customer findByEmail_hql(String email) {
-        return (Customer) getHibernateSession()
+        return (Customer) getCurrentHbnSession()
                 .createQuery("from Customer where email = :email")
                 .setParameter("email", email)
                 .uniqueResult();
@@ -29,7 +28,7 @@ public class CustomerRepository extends DomainRepository {
 
 
     public Customer findByEmail_criteria(String email) {
-        return (Customer) getHibernateSession().createCriteria(Customer.class)
+        return (Customer) getCurrentHbnSession().createCriteria(Customer.class)
                 .add(Restrictions.eq("email", email))
                 .uniqueResult();
     }

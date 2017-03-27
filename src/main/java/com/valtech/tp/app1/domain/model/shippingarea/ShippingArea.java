@@ -1,7 +1,7 @@
 package com.valtech.tp.app1.domain.model.shippingarea;
 
 import com.valtech.tp.app1.domain.model.address.Address;
-import com.valtech.util.model.EntityObject;
+import com.valtech.tp.app1.domain.model.commun.EntityObject;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.Embedded;

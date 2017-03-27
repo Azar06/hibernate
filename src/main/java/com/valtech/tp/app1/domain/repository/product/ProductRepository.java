@@ -3,18 +3,15 @@ package com.valtech.tp.app1.domain.repository.product;
 import com.valtech.tp.app1.domain.model.product.Product;
 import com.valtech.tp.app1.domain.model.product.ProductCriteria;
 import com.valtech.tp.app1.domain.model.product.ProductLite;
-import com.valtech.util.model.DomainRepository;
+import com.valtech.tp.app1.domain.repository.commun.DomainRepository;
 import org.hibernate.Criteria;
-import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
-import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -36,14 +33,14 @@ public class ProductRepository extends DomainRepository {
     }
 
     public Product findProductByReference(String ref) {
-        return (Product) getHibernateSession()
+        return (Product) getCurrentHbnSession()
                 .createQuery("from Product where reference = :ref")
                 .setParameter("ref", ref)
                 .uniqueResult();
     }
 
     public Product findProductByReferenceWithCriteria(String ref) {
-        return (Product) getHibernateSession()
+        return (Product) getCurrentHbnSession()
                 .createCriteria(Product.class)
                 .add(Restrictions.eq("reference", ref))
                 .uniqueResult();
@@ -61,7 +58,7 @@ public class ProductRepository extends DomainRepository {
     }
 
     public List<ProductLite> findProductsByCriteria(ProductCriteria productCriteria) {
-        Criteria criteria = getHibernateSession().createCriteria(Product.class);
+        Criteria criteria = getCurrentHbnSession().createCriteria(Product.class);
         if (!StringUtils.isEmpty(productCriteria.getName())) {
             criteria.add(Restrictions.ilike("name", productCriteria.getName().replace('*', '%')));
         }

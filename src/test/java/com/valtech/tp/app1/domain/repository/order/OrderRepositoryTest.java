@@ -1,17 +1,24 @@
 package com.valtech.tp.app1.domain.repository.order;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Sets;
 import com.valtech.tp.app1.domain.model.address.Address;
 import com.valtech.tp.app1.domain.model.customer.Customer;
 import com.valtech.tp.app1.domain.model.order.Order;
 import com.valtech.tp.app1.domain.model.order.OrderLine;
 import com.valtech.tp.app1.domain.model.product.Product;
+import org.hibernate.FetchMode;
+import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.jpa.provider.HibernateUtils;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import static com.google.common.collect.Sets.newHashSet;
 import static org.assertj.core.api.Assertions.*;
 
 import javax.persistence.EntityManager;
@@ -116,32 +123,95 @@ public class OrderRepositoryTest {
         Order foundOrder = em.find(Order.class, order.getOrderId());
         assertThat(foundOrder).isEqualTo(order);
         assertThat(foundOrder.getOrderLines()).isNotNull();
-        assertThat(foundOrder.getOrderLines().size()).isEqualTo(1);
-        assertThat(foundOrder.getOrderLines().get(0)).isEqualTo(product);
+        assertThat(foundOrder.getOrderLines()).hasSize(1);
+        assertThat(foundOrder.getOrderLines()).containsExactly(orderLine);
     }
 
     @Test
-    @Ignore
     public void insert_withOneOrderLine_addedAfterSave() throws Exception {
         // modelisation
         Order order = createOrder();
         Product product = createDummyProduct("MyRef");
-        OrderLine orderLine = new OrderLine(order, product);
 
         // persist the model
         em.persist(order.getCustomer());
         em.persist(product);
-        repo.insert(order);
+
+        OrderLine orderLine = new OrderLine(order, product);
         order.getOrderLines().add(orderLine);
 
+        repo.insert(order);
+
+        em.flush();
         em.clear();
 
         // check the asserts
         Order foundOrder = em.find(Order.class, order.getOrderId());
         assertThat(foundOrder).isEqualTo(order);
         assertThat(foundOrder.getOrderLines()).isNotNull();
-        assertThat(foundOrder.getOrderLines().size()).isEqualTo(1);
-        assertThat(foundOrder.getOrderLines().get(0)).isEqualTo(product);
+        assertThat(foundOrder.getOrderLines()).hasSize(1);
+        assertThat(foundOrder.getOrderLines()).containsExactly(orderLine);
+
+        foundOrder.getOrderLines().iterator().next().setQuantity(700);
+
+        em.flush();
+
+        assertThat(foundOrder.getOrderLines().remove(new OrderLine(order, product))).isTrue();
+        em.flush();
+        em.clear();
+
+        foundOrder = em.find(Order.class, order.getOrderId());
+        assertThat(foundOrder.getOrderLines()).isEmpty();
+    }
+
+    @Test
+    public void find() throws Exception {
+        // modelisation
+        Order order = createOrder();
+        Product product = createDummyProduct("MyRef");
+
+        // persist the model
+        em.persist(order.getCustomer());
+        em.persist(product);
+
+        OrderLine orderLine = new OrderLine(order, product);
+        order.getOrderLines().add(orderLine);
+
+        repo.insert(order);
+
+        em.flush();
+        em.clear();
+
+        Session session = em.unwrap(Session.class);
+        order = (Order) session
+                .createCriteria(Order.class)
+                .add(Restrictions.eq("customer.id", order.getCustomer().getId()))
+                .createAlias("orderLines", "ol")
+                .createAlias("ol.product", "p")
+                .add(Restrictions.ilike("p.name", "myname"))
+                .uniqueResult();
+
+        System.out.println(order);
+        em.clear();
+
+        order = (Order) session
+                .createCriteria(Order.class)
+                .add(Restrictions.idEq(order.getOrderId()))
+                .setFetchMode("orderLines", FetchMode.JOIN)
+                .uniqueResult();
+
+        em.clear();
+
+        System.out.println(order);
+        System.out.println(order.getOrderLines().size());
+
+        order = (Order) session.createQuery("from Order o left join fetch o.orderLines where id = :id")
+        .setParameter("id", order.getOrderId()).uniqueResult();
+
+        em.clear();
+
+        System.out.println(order);
+        System.out.println(order.getOrderLines().size());
     }
 
     @Test(expected = Exception.class)

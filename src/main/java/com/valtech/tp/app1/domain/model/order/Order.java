@@ -2,14 +2,12 @@ package com.valtech.tp.app1.domain.model.order;
 
 import com.google.common.collect.ImmutableList;
 import com.valtech.tp.app1.domain.model.customer.Customer;
-import com.valtech.util.model.EntityObject;
+import com.valtech.tp.app1.domain.model.commun.EntityObject;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "Order_table")
@@ -23,14 +21,15 @@ public class Order extends EntityObject {
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
+
     @NaturalId
     @NotNull
     @ManyToOne
     private Customer customer;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name="orderId")
-    private List<OrderLine> orderLines = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "order")
+    //@JoinColumn(name="orderId")
+    private Set<OrderLine> orderLines = new HashSet<>();
 
     private Order() {
     }
@@ -56,7 +55,7 @@ public class Order extends EntityObject {
         this.customer = customer;
     }
 
-    public List<OrderLine> getOrderLines() {
+    public Set<OrderLine> getOrderLines() {
         return orderLines;
     }
 

@@ -1,4 +1,4 @@
-package com.valtech.util.model;
+package com.valtech.tp.app1.domain.model.commun;
 
 import java.io.Serializable;
 

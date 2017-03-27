@@ -2,7 +2,7 @@ package com.valtech.tp.app1.domain.model.customer;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.valtech.tp.app1.domain.model.address.Address;
-import com.valtech.util.model.EntityObject;
+import com.valtech.tp.app1.domain.model.commun.EntityObject;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
@@ -19,6 +19,7 @@ public class Customer extends EntityObject {
     @NaturalId
     @Email
     @Size(max=64)
+    @Column(insertable = true, updatable = true)
     private String email;
 
     @NotBlank
