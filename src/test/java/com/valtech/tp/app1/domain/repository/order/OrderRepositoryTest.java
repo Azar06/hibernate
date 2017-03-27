@@ -6,9 +6,7 @@ import com.valtech.tp.app1.domain.model.customer.Customer;
 import com.valtech.tp.app1.domain.model.order.Order;
 import com.valtech.tp.app1.domain.model.order.OrderLine;
 import com.valtech.tp.app1.domain.model.product.Product;
-import org.hibernate.FetchMode;
 import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -80,14 +78,9 @@ public class OrderRepositoryTest {
         return product;
     }
 
-    private Order createOrder() {
-        Order order = new Order(date, createDummyCustomer());
-        return order;
-    }
-
     @Test
     public void insert() throws Exception {
-        Order order = createOrder();
+        Order order = new Order(date, createDummyCustomer());
         em.persist(order.getCustomer());
         repo.insert(order);
         em.clear();
@@ -100,19 +93,19 @@ public class OrderRepositoryTest {
     }
 
     @Test
-    @Ignore
     public void insert_withOneOrderLine() throws Exception {
-        // modelisation
-        Order order = createOrder();
+        Customer customer = createDummyCustomer();
         Product product = createDummyProduct("MyRef");
+        em.persist(customer);
+        em.persist(product);
+
+        Order order = new Order(date, customer);
         OrderLine orderLine = new OrderLine(order, product);
         order.getOrderLines().add(orderLine);
 
-        // persist the model
-        em.persist(order.getCustomer());
-        em.persist(product);
         repo.insert(order);
 
+        em.flush();
         em.clear();
 
         // check the asserts
@@ -125,18 +118,18 @@ public class OrderRepositoryTest {
 
     @Test
     public void insert_withOneOrderLine_addedAfterSave() throws Exception {
-        // modelisation
-        Order order = createOrder();
+        Customer customer = createDummyCustomer();
         Product product = createDummyProduct("MyRef");
-
-        // persist the model
-        em.persist(order.getCustomer());
+        em.persist(customer);
         em.persist(product);
 
-        OrderLine orderLine = new OrderLine(order, product);
-        order.getOrderLines().add(orderLine);
+        Order order = new Order(date, customer);
 
         repo.insert(order);
+
+        // update order after the persist
+        OrderLine orderLine = new OrderLine(order, product);
+        order.getOrderLines().add(orderLine);
 
         em.flush();
         em.clear();
@@ -147,29 +140,16 @@ public class OrderRepositoryTest {
         assertThat(foundOrder.getOrderLines()).isNotNull();
         assertThat(foundOrder.getOrderLines()).hasSize(1);
         assertThat(foundOrder.getOrderLines()).containsExactly(orderLine);
-
-        foundOrder.getOrderLines().iterator().next().setQuantity(700);
-
-        em.flush();
-
-        assertThat(foundOrder.getOrderLines().remove(new OrderLine(order, product))).isTrue();
-        em.flush();
-        em.clear();
-
-        foundOrder = em.find(Order.class, order.getOrderId());
-        assertThat(foundOrder.getOrderLines()).isEmpty();
     }
 
     @Test
-    public void find() throws Exception {
-        // modelisation
-        Order order = createOrder();
+    public void remove_orderLine() throws Exception {
+        Customer customer = createDummyCustomer();
         Product product = createDummyProduct("MyRef");
-
-        // persist the model
-        em.persist(order.getCustomer());
+        em.persist(customer);
         em.persist(product);
 
+        Order order = new Order(date, customer);
         OrderLine orderLine = new OrderLine(order, product);
         order.getOrderLines().add(orderLine);
 
@@ -178,47 +158,97 @@ public class OrderRepositoryTest {
         em.flush();
         em.clear();
 
-        Session session = em.unwrap(Session.class);
-        order = (Order) session
-                .createCriteria(Order.class)
-                .add(Restrictions.eq("customer.id", order.getCustomer().getId()))
-                .createAlias("orderLines", "ol")
-                .createAlias("ol.product", "p")
-                .add(Restrictions.ilike("p.name", "myname"))
-                .uniqueResult();
+        // reload the class because the clear disconnect the order from hibernate
+        Order foundOrder = em.find(Order.class, order.getOrderId());
+        boolean hasRemovedSomething = foundOrder.getOrderLines().remove(new OrderLine(order, product));
+        assertThat(hasRemovedSomething).isTrue();
 
-        System.out.println(order);
+        em.flush();
         em.clear();
 
-        order = (Order) session
-                .createCriteria(Order.class)
-                .add(Restrictions.idEq(order.getOrderId()))
-                .setFetchMode("orderLines", FetchMode.JOIN)
-                .uniqueResult();
+        // reload the class because the clear disconnect the order from hibernate
+        foundOrder = em.find(Order.class, order.getOrderId());
+        assertThat(foundOrder.getOrderLines()).isEmpty();
+    }
+
+    @Test
+    public void findOrdersWithCustomerContainingProductName() throws Exception {
+        Customer customer = createDummyCustomer();
+        em.persist(customer);
+
+        Product product = createDummyProduct("MyRef");
+        em.persist(product);
+
+        Order order = new Order(date, customer);
+        OrderLine orderLine = new OrderLine(order, product);
+        order.getOrderLines().add(orderLine);
+        repo.insert(order);
+
+        em.flush();
+        em.clear();
+
+        Order foundOrder = repo.findOrdersWithCustomerContainingProductName(customer, "myname");
+
+        assertThat(foundOrder).isEqualTo(order);
+    }
+
+    @Test
+    public void findOrderAndOrderLines() throws Exception {
+        Customer customer = createDummyCustomer();
+        em.persist(customer);
+
+        Product product = createDummyProduct("MyRef");
+        em.persist(product);
+
+        Order order = new Order(date, customer);
+        OrderLine orderLine = new OrderLine(order, product);
+        order.getOrderLines().add(orderLine);
+        repo.insert(order);
+
+        em.flush();
+        em.clear();
+
+        Order foundOrder = repo.findOrderAndOrderLines(order.getOrderId());
+
+        assertThat(foundOrder).isEqualTo(order);
+        assertThat(order.getOrderLines()).hasSize(1);
+        // throw a Lazy...Exception if the orderLines are not loaded
+    }
+
+    @Test
+    public void findOrderAndOrderLinesUsingHQL() throws Exception {
+        Customer customer = createDummyCustomer();
+        em.persist(customer);
+
+        Product product = createDummyProduct("MyRef");
+        em.persist(product);
+
+        Order order = new Order(date, customer);
+        OrderLine orderLine = new OrderLine(order, product);
+        order.getOrderLines().add(orderLine);
+        repo.insert(order);
+
+        em.flush();
+        em.clear();
+
+        Order foundOrder = repo.findOrderAndOrderLinesUsingHQL(order.getOrderId());
 
         em.clear();
 
-        System.out.println(order);
-        System.out.println(order.getOrderLines().size());
-
-        order = (Order) session.createQuery("from Order o left join fetch o.orderLines where id = :id")
-                .setParameter("id", order.getOrderId()).uniqueResult();
-
-        em.clear();
-
-        System.out.println(order);
-        System.out.println(order.getOrderLines().size());
+        assertThat(foundOrder).isEqualTo(order);
+        assertThat(order.getOrderLines()).hasSize(1);
+        // throw a Lazy...Exception if the orderLines are not loaded
     }
 
     @Test(expected = Exception.class)
     public void insert_withoutExistingCustomer() throws Exception {
-        Order order = createOrder();
+        Order order = new Order(date, createDummyCustomer());
         repo.insert(order);
     }
 
     @Test
     public void getOrder() throws Exception {
-        Order order = createOrder();
+        Order order = new Order(date, createDummyCustomer());
         em.persist(order.getCustomer());
         em.persist(order);
         em.clear();

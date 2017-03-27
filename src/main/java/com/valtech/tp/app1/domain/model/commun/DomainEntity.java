@@ -44,6 +44,6 @@ public abstract class DomainEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "[" + getClass() + ": {" + getNaturalId().toString() + "}]";
+        return "[" + getClass().getSimpleName() + ": {" + getNaturalId().toString() + "}]";
     }
 }

@@ -21,14 +21,12 @@ public class Order extends DomainEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
-
     @NaturalId
     @NotNull
     @ManyToOne
     private Customer customer;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "order")
-    //@JoinColumn(name="orderId")
     private Set<OrderLine> orderLines = new HashSet<>();
 
     private Order() {
@@ -49,10 +47,6 @@ public class Order extends DomainEntity {
 
     public Customer getCustomer() {
         return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
     }
 
     public Set<OrderLine> getOrderLines() {
