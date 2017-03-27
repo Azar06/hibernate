@@ -80,7 +80,5 @@ public class ProductRepository extends DomainRepository {
         return criteria.list();
     }
 
-    private Session getHibernateSession() {
-        return getEntityManager().unwrap(Session.class);
-    }
+
 }

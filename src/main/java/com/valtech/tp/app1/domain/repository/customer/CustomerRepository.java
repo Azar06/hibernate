@@ -26,9 +26,7 @@ public class CustomerRepository extends DomainRepository {
     }
 
 
-    private Session getHibernateSession() {
-        return getEntityManager().unwrap(Session.class);
-    }
+
 
     public Customer findByEmail_criteria(String email) {
         return (Customer) getHibernateSession().createCriteria(Customer.class)

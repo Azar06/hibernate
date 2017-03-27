@@ -1,5 +1,6 @@
 package com.valtech.util.model;
 
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -14,6 +15,9 @@ public class DomainRepository {
         return entityManager;
     }
 
+    public Session getHibernateSession() {
+        return getEntityManager().unwrap(Session.class);
+    }
     public void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
