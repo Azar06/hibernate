@@ -48,5 +48,6 @@ public class ReviewRepositoryTest {
         Review loadedReview = em.find(Review.class, review.getId());
         assertThat(loadedReview).isNotNull();
         assertThat(loadedReview).isEqualTo(review);
+
     }
 }
