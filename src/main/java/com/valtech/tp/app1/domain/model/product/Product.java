@@ -12,9 +12,9 @@ import java.util.List;
 
 @Entity
 @Table(
-        name = "TAB_PRODUCT",
+        name = "Product_", // we can rename the table inside of the DataBase
         indexes = {
-                @Index(name = "I_Product_name", columnList = "name")
+                @Index(name = "I_Product_name", columnList = "name") // we can create indexes to optimize requests
         }
 )
 public class Product extends DomainEntity {
@@ -23,7 +23,7 @@ public class Product extends DomainEntity {
     private Long id;
 
     @NaturalId
-    @Column(name = "COL_REF")
+    @Column(name = "REF")
     @Size(max=32)
     private String reference;
 
@@ -36,7 +36,7 @@ public class Product extends DomainEntity {
 
     private String description;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "product")
     private List<Review> reviews;
 
     private Product() {

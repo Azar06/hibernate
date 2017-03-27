@@ -29,7 +29,7 @@ public class OrderRepository extends DomainRepository {
 
     public Order findOrderAndOrderLinesUsingHQL(Long id) {
         return (Order) getCurrentHbnSession()
-                .createQuery("from Order o left join fetch o.orderLines where id = :id")
+                .createQuery("from Order o left join fetch o.orderLines where o.id = :id")
                 .setParameter("id", id)
                 .uniqueResult();
     }

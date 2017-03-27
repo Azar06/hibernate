@@ -10,11 +10,11 @@ import javax.validation.constraints.NotNull;
 import java.util.*;
 
 @Entity
-@Table(name = "Order_table")
+@Table(name = "Order_")
 public class Order extends DomainEntity {
     @Id
     @GeneratedValue
-    private Long orderId;
+    private Long id;
 
     @NaturalId
     @NotNull
@@ -37,8 +37,8 @@ public class Order extends DomainEntity {
         this.customer = customer;
     }
 
-    public Long getOrderId() {
-        return orderId;
+    public Long getId() {
+        return id;
     }
 
     public Date getDate() {

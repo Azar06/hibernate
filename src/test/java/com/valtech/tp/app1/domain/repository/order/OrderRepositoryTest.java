@@ -6,8 +6,6 @@ import com.valtech.tp.app1.domain.model.customer.Customer;
 import com.valtech.tp.app1.domain.model.order.Order;
 import com.valtech.tp.app1.domain.model.order.OrderLine;
 import com.valtech.tp.app1.domain.model.product.Product;
-import org.hibernate.Session;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,7 +83,7 @@ public class OrderRepositoryTest {
         repo.insert(order);
         em.clear();
 
-        Order foundOrder = em.find(Order.class, order.getOrderId());
+        Order foundOrder = em.find(Order.class, order.getId());
 
         assertThat(foundOrder.getDate().getTime()).isEqualTo(order.getDate().getTime());
         assertThat(foundOrder).isEqualTo(order);
@@ -109,7 +107,7 @@ public class OrderRepositoryTest {
         em.clear();
 
         // check the asserts
-        Order foundOrder = em.find(Order.class, order.getOrderId());
+        Order foundOrder = em.find(Order.class, order.getId());
         assertThat(foundOrder).isEqualTo(order);
         assertThat(foundOrder.getOrderLines()).isNotNull();
         assertThat(foundOrder.getOrderLines()).hasSize(1);
@@ -135,7 +133,7 @@ public class OrderRepositoryTest {
         em.clear();
 
         // check the asserts
-        Order foundOrder = em.find(Order.class, order.getOrderId());
+        Order foundOrder = em.find(Order.class, order.getId());
         assertThat(foundOrder).isEqualTo(order);
         assertThat(foundOrder.getOrderLines()).isNotNull();
         assertThat(foundOrder.getOrderLines()).hasSize(1);
@@ -159,7 +157,7 @@ public class OrderRepositoryTest {
         em.clear();
 
         // reload the class because the clear disconnect the order from hibernate
-        Order foundOrder = em.find(Order.class, order.getOrderId());
+        Order foundOrder = em.find(Order.class, order.getId());
         boolean hasRemovedSomething = foundOrder.getOrderLines().remove(new OrderLine(order, product));
         assertThat(hasRemovedSomething).isTrue();
 
@@ -167,7 +165,7 @@ public class OrderRepositoryTest {
         em.clear();
 
         // reload the class because the clear disconnect the order from hibernate
-        foundOrder = em.find(Order.class, order.getOrderId());
+        foundOrder = em.find(Order.class, order.getId());
         assertThat(foundOrder.getOrderLines()).isEmpty();
     }
 
@@ -208,7 +206,7 @@ public class OrderRepositoryTest {
         em.flush();
         em.clear();
 
-        Order foundOrder = repo.findOrderAndOrderLines(order.getOrderId());
+        Order foundOrder = repo.findOrderAndOrderLines(order.getId());
 
         assertThat(foundOrder).isEqualTo(order);
         assertThat(order.getOrderLines()).hasSize(1);
@@ -231,12 +229,12 @@ public class OrderRepositoryTest {
         em.flush();
         em.clear();
 
-        Order foundOrder = repo.findOrderAndOrderLinesUsingHQL(order.getOrderId());
+        Order foundOrder = repo.findOrderAndOrderLinesUsingHQL(order.getId());
 
         em.clear();
 
         assertThat(foundOrder).isEqualTo(order);
-        assertThat(order.getOrderLines()).hasSize(1);
+        assertThat(foundOrder.getOrderLines()).hasSize(1);
         // throw a Lazy...Exception if the orderLines are not loaded
     }
 
@@ -253,7 +251,7 @@ public class OrderRepositoryTest {
         em.persist(order);
         em.clear();
 
-        Order foundOrder = repo.getOrder(order.getOrderId());
+        Order foundOrder = repo.getOrder(order.getId());
         assertThat(foundOrder).isEqualTo(order);
         assertThat(foundOrder.getCustomer()).isEqualTo(this.createDummyCustomer());
     }
