@@ -83,6 +83,4 @@ public class ProductRepository extends DomainRepository {
         criteria.setResultTransformer(Transformers.aliasToBean(ProductLite.class));
         return criteria.list();
     }
-
-
 }

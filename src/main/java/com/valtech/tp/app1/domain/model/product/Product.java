@@ -27,6 +27,7 @@ public class Product extends DomainEntity {
     private Long id;
 
     @NaturalId
+    @NotBlank
     @Column(name = "REF")
     @Size(max=32)
     private String reference;

@@ -24,7 +24,7 @@ public class ProductController extends AbstractController {
 
     @GetMapping("{id}")
     public ResponseEntity<Product> getProduct(@PathVariable(name = "id") String id) {
-        return new ResponseEntity<Product>(new Product(Long.valueOf(id)), HttpStatus.OK);
+        return new ResponseEntity<Product>(productService.getProduct(Long.valueOf(id)), HttpStatus.OK);
     }
 
     @PostMapping
@@ -34,23 +34,28 @@ public class ProductController extends AbstractController {
             @ApiResponse(code = 400, message = "Invalid product")
     })
     public ResponseEntity<Product> insertProduct(@RequestBody @Valid Product product) throws EntityAlreadyExist {
-        if(product.getId() != null) {
+        if (product.getId() != null) {
             throw new IllegalArgumentException("The id has to be null");
         }
         productService.insert(product);
         return new ResponseEntity<Product>(product, HttpStatus.CREATED);
     }
 
+    @PutMapping("{id}")
+    @ApiOperation("Update a product")
+    public ResponseEntity<Product> updateProduct(@PathVariable(name = "id") String id, @RequestBody Product productUpdater) {
+        Product product = productService.updateProduct(Long.valueOf(id), productUpdater);
+        return new ResponseEntity<Product>(product, HttpStatus.ACCEPTED);
+    }
+
     @GetMapping
     @ApiOperation(value = "Get a list of products")
-    /*
     @ApiImplicitParams({
             @ApiImplicitParam()
     })
-    */
     @ApiResponses({
-            @ApiResponse(code = 201, message = "Product created"),
-            @ApiResponse(code = 400, message = "Invalid product")
+            @ApiResponse(code = 200, message = "Ok"),
+            //@ApiResponse(code = 400, message = "Invalid product")
     })
     public List<ProductLite> getProducts(@RequestParam(required = false) String name) {
         ProductCriteria productCriteria = new ProductCriteria();

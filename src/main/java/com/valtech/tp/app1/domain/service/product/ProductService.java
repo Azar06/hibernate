@@ -25,4 +25,16 @@ public class ProductService extends DomainService {
     public List<ProductLite> findProductsByCriteria(ProductCriteria productCriteria) {
         return productRepository.findProductsByCriteria(productCriteria);
     }
+
+    public Product updateProduct(Long id, Product productUpdater) {
+        Product product = productRepository.getProduct(id);
+        product.setName(productUpdater.getName());
+        product.setDescription(productUpdater.getDescription());
+        product.setPrice(productUpdater.getPrice());
+        return product;
+    }
+
+    public Product getProduct(Long id) {
+        return productRepository.getProduct(id);
+    }
 }
