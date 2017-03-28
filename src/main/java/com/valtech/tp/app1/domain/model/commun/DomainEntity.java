@@ -1,5 +1,7 @@
 package com.valtech.tp.app1.domain.model.commun;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 import java.util.Objects;
@@ -14,6 +16,7 @@ public abstract class DomainEntity implements Serializable {
     /**
      * @return an object or an Object[] (not other thing)
      */
+    @JsonIgnore
     public abstract Object getNaturalId();
 
     @Override

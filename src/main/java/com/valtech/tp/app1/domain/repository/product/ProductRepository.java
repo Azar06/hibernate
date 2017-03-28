@@ -1,5 +1,6 @@
 package com.valtech.tp.app1.domain.repository.product;
 
+import com.valtech.tp.app1.domain.model.commun.EntityAlreadyExist;
 import com.valtech.tp.app1.domain.model.product.Product;
 import com.valtech.tp.app1.domain.model.product.ProductCriteria;
 import com.valtech.tp.app1.domain.model.product.ProductLite;
@@ -12,6 +13,7 @@ import org.hibernate.transform.Transformers;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -24,8 +26,13 @@ public class ProductRepository extends DomainRepository {
 
     }
 
-    public void insert(Product product) {
-        getEntityManager().persist(product);
+    public void insert(Product product) throws EntityAlreadyExist {
+        if(findProductByReference(product.getReference()) == null) {
+            getEntityManager().persist(product);
+        }
+        else {
+            throw new EntityAlreadyExist("The reference is already used.");
+        }
     }
 
     public Product getProduct(Long id) {

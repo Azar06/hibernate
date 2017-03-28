@@ -1,5 +1,6 @@
 package com.valtech.tp.app1.domain.repository.product;
 
+import com.valtech.tp.app1.domain.model.commun.EntityAlreadyExist;
 import com.valtech.tp.app1.domain.model.product.*;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -41,7 +42,7 @@ public class ProductRepositoryTest {
     }
 
     @Test
-    public void insert() {
+    public void insert() throws EntityAlreadyExist {
         Product p = createDummyProduct();
         repo.insert(p);
         em.flush();
