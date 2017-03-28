@@ -8,6 +8,8 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class OrderRepository extends DomainRepository {
 
@@ -34,13 +36,13 @@ public class OrderRepository extends DomainRepository {
                 .uniqueResult();
     }
 
-    public Order findOrdersWithCustomerContainingProductName(Customer customer, String productName) {
-        return (Order) getCurrentHbnSession()
+    public List<Order> findOrdersWithCustomerContainingProductName(Customer customer, String productName) {
+        return (List<Order>) getCurrentHbnSession()
                 .createCriteria(Order.class)
                 .add(Restrictions.eq("customer.id", customer.getId()))
                 .createAlias("orderLines", "ol")
                 .createAlias("ol.product", "p")
                 .add(Restrictions.ilike("p.name", productName.replace('*', '%')))
-                .uniqueResult();
+                .list();
     }
 }

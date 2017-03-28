@@ -16,6 +16,7 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -185,9 +186,37 @@ public class OrderRepositoryTest {
         em.flush();
         em.clear();
 
-        Order foundOrder = repo.findOrdersWithCustomerContainingProductName(customer, "myname");
+        List<Order> foundOrders = repo.findOrdersWithCustomerContainingProductName(customer, "myname");
 
-        assertThat(foundOrder).isEqualTo(order);
+        assertThat(foundOrders).hasSize(1);
+        assertThat(foundOrders.get(0)).isEqualTo(order);
+    }
+
+    @Test
+    public void findOrdersWithCustomerContainingProductName_twoOrdersWork() throws Exception {
+        Customer customer = createDummyCustomer();
+        em.persist(customer);
+
+        Product product = createDummyProduct("MyRef");
+        em.persist(product);
+
+        Order order = new Order(date, customer);
+        OrderLine orderLine = new OrderLine(order, product);
+        order.getOrderLines().add(orderLine);
+        repo.insert(order);
+
+        Order order2 = new Order(new Date(50), customer);
+        OrderLine orderLine2 = new OrderLine(order2, product);
+        order2.getOrderLines().add(orderLine2);
+        repo.insert(order2);
+
+        em.flush();
+        em.clear();
+
+        List<Order> foundOrders = repo.findOrdersWithCustomerContainingProductName(customer, "myname");
+
+        assertThat(foundOrders).hasSize(2);
+        assertThat(foundOrders).contains(order, order2);
     }
 
     @Test
