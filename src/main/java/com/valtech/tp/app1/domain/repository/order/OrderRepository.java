@@ -4,7 +4,6 @@ import com.valtech.tp.app1.domain.model.customer.Customer;
 import com.valtech.tp.app1.domain.model.order.Order;
 import com.valtech.tp.app1.domain.repository.commun.DomainRepository;
 import org.hibernate.FetchMode;
-import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 

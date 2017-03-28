@@ -1,13 +1,16 @@
 package com.valtech.tp.app1.domain.model.review;
 
 import com.google.common.collect.ImmutableList;
+import com.valtech.tp.app1.domain.model.commun.DomainEntity;
 import com.valtech.tp.app1.domain.model.customer.Customer;
 import com.valtech.tp.app1.domain.model.product.Product;
-import com.valtech.tp.app1.domain.model.commun.DomainEntity;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.Range;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 

@@ -1,8 +1,8 @@
 package com.valtech.tp.app1.domain.repository.product;
 
-import com.valtech.tp.app1.domain.model.product.Product;
-import com.valtech.tp.app1.domain.model.product.ProductCriteria;
-import com.valtech.tp.app1.domain.model.product.ProductLite;
+import com.valtech.tp.app1.domain.model.product.*;
+import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +32,11 @@ public class ProductRepositoryTest {
     private static String description = "description";
 
     public static Product createDummyProduct() {
-        Product product = new Product(ref);
+        Product product = new SuperProduct(ref);
         product.setName(name);
         product.setPrice(price);
         product.setDescription(description);
+        //product.setSuperInformation("SuperInfo");
         return product;
     }
 
@@ -43,11 +44,22 @@ public class ProductRepositoryTest {
     public void insert() {
         Product p = createDummyProduct();
         repo.insert(p);
+        em.flush();
 
         assertThat(p.getId()).isNotNull();
 
         Product p2 = em.find(Product.class, p.getId());
         assertThat(p.getName()).isEqualTo(name);
+    }
+
+    @Test
+    public void findByType() throws Exception {
+
+
+        Session session = em.unwrap(Session.class);
+        session.createCriteria(MegaProduct.class)
+                //.add(Restrictions.eq("class", "super"))
+                .list();
     }
 
     @Test

@@ -1,12 +1,5 @@
 package com.valtech.tp.app1.domain.model.product;
 
-import org.hibernate.annotations.NaturalId;
-import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.Range;
-
-import javax.persistence.*;
-import javax.validation.constraints.Size;
-
 public class ProductLite {
 
     private Long id;

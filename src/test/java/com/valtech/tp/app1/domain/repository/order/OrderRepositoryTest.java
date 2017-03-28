@@ -6,6 +6,7 @@ import com.valtech.tp.app1.domain.model.customer.Customer;
 import com.valtech.tp.app1.domain.model.order.Order;
 import com.valtech.tp.app1.domain.model.order.OrderLine;
 import com.valtech.tp.app1.domain.model.product.Product;
+import com.valtech.tp.app1.domain.model.product.SuperProduct;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +71,7 @@ public class OrderRepositoryTest {
     private String description = "description";
 
     private Product createDummyProduct(String ref) {
-        Product product = new Product(ref);
+        Product product = new SuperProduct(ref);
         product.setName(name);
         product.setPrice(price);
         product.setDescription(description);

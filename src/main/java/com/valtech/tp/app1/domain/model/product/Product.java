@@ -1,7 +1,8 @@
 package com.valtech.tp.app1.domain.model.product;
 
-import com.valtech.tp.app1.domain.model.review.Review;
 import com.valtech.tp.app1.domain.model.commun.DomainEntity;
+import com.valtech.tp.app1.domain.model.review.Review;
+import org.hibernate.annotations.GeneratorType;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Range;
@@ -11,6 +12,9 @@ import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING, length = 10)
+@DiscriminatorValue("simple")
 @Table(
         name = "Product_", // we can rename the table inside of the DataBase
         indexes = {
@@ -19,7 +23,7 @@ import java.util.List;
 )
 public class Product extends DomainEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NaturalId
@@ -39,7 +43,7 @@ public class Product extends DomainEntity {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "product")
     private List<Review> reviews;
 
-    private Product() {
+    protected Product() {
     }
 
     public Product(Long id) {

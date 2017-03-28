@@ -1,13 +1,15 @@
 package com.valtech.tp.app1.domain.model.order;
 
 import com.google.common.collect.ImmutableList;
-import com.valtech.tp.app1.domain.model.customer.Customer;
 import com.valtech.tp.app1.domain.model.commun.DomainEntity;
+import com.valtech.tp.app1.domain.model.customer.Customer;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "Order_")
