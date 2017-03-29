@@ -1,6 +1,7 @@
 package com.valtech.tp.app1.domain.repository.customer;
 
 
+import com.valtech.tp.app1.domain.model.commun.EntityAlreadyExist;
 import com.valtech.tp.app1.domain.model.customer.Customer;
 import com.valtech.tp.app1.domain.repository.commun.DomainRepository;
 import org.hibernate.criterion.Restrictions;
@@ -25,15 +26,11 @@ public class CustomerRepository extends DomainRepository {
                 .uniqueResult();
     }
 
-
-
-
     public Customer findByEmail_criteria(String email) {
         return (Customer) getCurrentHbnSession().createCriteria(Customer.class)
                 .add(Restrictions.eq("email", email))
                 .uniqueResult();
     }
-
 
     public Customer findByEmail_criteria_jpa(String email) {
         CriteriaBuilder criteriaBuilder = getEntityManager().getCriteriaBuilder();
@@ -47,7 +44,12 @@ public class CustomerRepository extends DomainRepository {
 
 
     public void insertCustomer(Customer customer) {
-        getEntityManager().persist(customer);
+        if(findByEmail_criteria(customer.getEmail()) == null) {
+            getEntityManager().persist(customer);
+        }
+        else {
+            throw new EntityAlreadyExist("The reference is already used.");
+        }
     }
 
     public List<Customer> getCustomers() {
