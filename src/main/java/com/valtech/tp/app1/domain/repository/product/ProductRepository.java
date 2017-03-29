@@ -1,6 +1,7 @@
 package com.valtech.tp.app1.domain.repository.product;
 
 import com.valtech.tp.app1.domain.model.commun.EntityAlreadyExist;
+import com.valtech.tp.app1.domain.model.commun.EntityDoNotExist;
 import com.valtech.tp.app1.domain.model.product.Product;
 import com.valtech.tp.app1.domain.model.product.ProductCriteria;
 import com.valtech.tp.app1.domain.model.product.ProductLite;
@@ -82,5 +83,15 @@ public class ProductRepository extends DomainRepository {
                 .add(Projections.property("name").as("name")));
         criteria.setResultTransformer(Transformers.aliasToBean(ProductLite.class));
         return criteria.list();
+    }
+
+    public void deleteProduct(Long id) {
+        Product product = getProduct(id);
+        if(product != null) {
+            getEntityManager().remove(product);
+        }
+        else {
+            throw new EntityDoNotExist("This id is not used by a product.");
+        }
     }
 }

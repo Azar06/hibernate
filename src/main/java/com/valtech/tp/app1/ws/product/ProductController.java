@@ -48,6 +48,13 @@ public class ProductController extends AbstractController {
         return new ResponseEntity<Product>(product, HttpStatus.ACCEPTED);
     }
 
+    @DeleteMapping("{id}")
+    @ApiOperation("Delete a product")
+    public ResponseEntity<Product> deleteProduct(@PathVariable(name = "id") String id) {
+        productService.deleteProduct(Long.valueOf(id));
+        return new ResponseEntity(HttpStatus.ACCEPTED);
+    }
+
     @GetMapping
     @ApiOperation(value = "Get a list of products")
     @ApiImplicitParams({

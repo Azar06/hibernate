@@ -37,4 +37,8 @@ public class ProductService extends DomainService {
     public Product getProduct(Long id) {
         return productRepository.getProduct(id);
     }
+
+    public void deleteProduct(Long id) {
+        productRepository.deleteProduct(id);
+    }
 }

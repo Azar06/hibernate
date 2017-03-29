@@ -1,6 +1,7 @@
 package com.valtech.tp.app1.ws.common;
 
 import com.valtech.tp.app1.domain.model.commun.EntityAlreadyExist;
+import com.valtech.tp.app1.domain.model.commun.EntityDoNotExist;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -8,8 +9,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import javax.validation.ConstraintViolationException;
 
 @RestControllerAdvice
 public class AppExceptionHandler {
@@ -32,7 +31,8 @@ public class AppExceptionHandler {
     @ExceptionHandler(
             {
                     MethodArgumentNotValidException.class,
-                    IllegalArgumentException.class
+                    IllegalArgumentException.class,
+                    EntityDoNotExist.class
             })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String processNotValid(Throwable throwable) {
