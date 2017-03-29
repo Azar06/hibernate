@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.List;
 
 @Repository
 public class CustomerRepository extends DomainRepository {
@@ -47,5 +48,9 @@ public class CustomerRepository extends DomainRepository {
 
     public void insertCustomer(Customer customer) {
         getEntityManager().persist(customer);
+    }
+
+    public List<Customer> getCustomers() {
+        return getCurrentHbnSession().createCriteria(Customer.class).list();
     }
 }

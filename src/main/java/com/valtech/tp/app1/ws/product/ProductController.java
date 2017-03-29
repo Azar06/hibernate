@@ -43,26 +43,30 @@ public class ProductController extends AbstractController {
 
     @PutMapping("{id}")
     @ApiOperation("Update a product")
+    @ApiResponses({
+            @ApiResponse(code = 202, message = "Accepted"),
+            @ApiResponse(code = 400, message = "Invalid product")
+    })
     public ResponseEntity<Product> updateProduct(@PathVariable(name = "id") String id, @RequestBody Product productUpdater) {
         Product product = productService.updateProduct(Long.valueOf(id), productUpdater);
-        return new ResponseEntity<Product>(product, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(product, HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping("{id}")
     @ApiOperation("Delete a product")
-    public ResponseEntity<Product> deleteProduct(@PathVariable(name = "id") String id) {
+    @ApiResponses({
+            @ApiResponse(code = 202, message = "Accepted"),
+            @ApiResponse(code = 400, message = "Invalid id")
+    })
+    public ResponseEntity deleteProduct(@PathVariable(name = "id") String id) {
         productService.deleteProduct(Long.valueOf(id));
         return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 
     @GetMapping
     @ApiOperation(value = "Get a list of products")
-    @ApiImplicitParams({
-            @ApiImplicitParam()
-    })
     @ApiResponses({
             @ApiResponse(code = 200, message = "Ok"),
-            //@ApiResponse(code = 400, message = "Invalid product")
     })
     public List<ProductLite> getProducts(@RequestParam(required = false) String name) {
         ProductCriteria productCriteria = new ProductCriteria();

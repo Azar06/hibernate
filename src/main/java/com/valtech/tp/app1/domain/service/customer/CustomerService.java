@@ -1,0 +1,20 @@
+package com.valtech.tp.app1.domain.service.customer;
+
+import com.valtech.tp.app1.domain.model.customer.Customer;
+import com.valtech.tp.app1.domain.repository.customer.CustomerRepository;
+import com.valtech.tp.app1.domain.service.commun.DomainService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class CustomerService extends DomainService {
+
+    @Autowired
+    private CustomerRepository customerRepository;
+
+    public List<Customer> findCustomers() {
+        return customerRepository.getCustomers();
+    }
+}
