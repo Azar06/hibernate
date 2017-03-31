@@ -2,6 +2,7 @@ package com.valtech.tp.app1.ws.common;
 
 import com.valtech.tp.app1.domain.model.commun.EntityAlreadyExist;
 import com.valtech.tp.app1.domain.model.commun.EntityDoNotExist;
+import com.valtech.tp.app1.domain.model.commun.EntityNotFound;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -39,5 +40,11 @@ public class AppExceptionHandler {
         return throwable.getMessage();
     }
 
-
+    @ExceptionHandler({
+            EntityNotFound.class
+    })
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String processEntityNotFound(Throwable throwable) {
+        return throwable.getMessage();
+    }
 }

@@ -2,6 +2,7 @@ package com.valtech.tp.app1.domain.repository.customer;
 
 
 import com.valtech.tp.app1.domain.model.commun.EntityAlreadyExist;
+import com.valtech.tp.app1.domain.model.commun.EntityNotFound;
 import com.valtech.tp.app1.domain.model.customer.Customer;
 import com.valtech.tp.app1.domain.repository.commun.DomainRepository;
 import org.hibernate.criterion.Restrictions;
@@ -27,9 +28,15 @@ public class CustomerRepository extends DomainRepository {
     }
 
     public Customer findByEmail_criteria(String email) {
-        return (Customer) getCurrentHbnSession().createCriteria(Customer.class)
-                .add(Restrictions.eq("email", email))
+        Customer customer = (Customer) getCurrentHbnSession().createCriteria(Customer.class)
+                .add(Restrictions.like("email", email))
                 .uniqueResult();
+
+        if(customer == null) {
+            throw new EntityNotFound("The Customer was not found.");
+        }
+
+        return customer;
     }
 
     public Customer findByEmail_criteria_jpa(String email) {
@@ -44,15 +51,26 @@ public class CustomerRepository extends DomainRepository {
 
 
     public void insertCustomer(Customer customer) {
-        if(findByEmail_criteria(customer.getEmail()) == null) {
-            getEntityManager().persist(customer);
-        }
-        else {
+        try {
+            findByEmail_criteria(customer.getEmail());
             throw new EntityAlreadyExist("The reference is already used.");
+        }
+        catch(EntityNotFound ex) {
+            getEntityManager().persist(customer);
         }
     }
 
     public List<Customer> getCustomers() {
         return getCurrentHbnSession().createCriteria(Customer.class).list();
+    }
+
+    public void deleteCustomerByEmail(String email) {
+        Customer customer = findByEmail_criteria(email);
+        getEntityManager().remove(customer);
+    }
+
+    public void deleteCustomerById(Long id) {
+        Customer customer = findById(id);
+        getEntityManager().remove(customer);
     }
 }
